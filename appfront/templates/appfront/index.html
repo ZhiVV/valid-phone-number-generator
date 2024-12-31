@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Phone Generator</title>
+        <link href="{% static 'appfront/css/styles.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="main-content">
+            <div class="form-container">
+                <form action="/" method="get" id="dataForm">
+                    <div class="form-group">
+                        <label for="countryCode">
+                            Select country code:
+                        </label>
+                        <select id="countryCode" name="countryCode">
+                            {% for key, value in dct_locale.items %}
+                                {% if value == country_code %}
+                                <option value={{ value }} selected>
+                                    {{ key }}
+                                </option>
+                                {% else %}
+                                <option value={{ value }}>
+                                    {{ key }}
+                                </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <button type="submit">
+                            Generate number
+                        </button>
+                    </div>
+                </form>
+                <div class="copy-container">
+                    {% if phone_number %}
+                    <p>
+                        Phone number:  +{{ phone_number.country_code }}
+                        {% if phone_number.extension %}
+                        <span class="copy-text">
+                            <font color="red">
+                                {{ phone_number.national_number }}
+                            </font>
+                        </span>
+                        {% else %}
+                        <span class="copy-text">
+                            {{ phone_number.national_number }}
+                        </span>
+                        {% endif %}
+                        <button class="copy-button">
+                            Copy
+                        </button>
+                        <button class="qr-button">
+                            QR code
+                        </button>
+                    </p>
+                    <p hidden class="view-text">
+                        {{ svg|safe }}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="qrModal">
+            <div class="modal-content">
+                <span class="close-modal"></span>
+                <p id="qrCodeText"></p>
+            </div>
+        </div>
+        <footer>
+            <p>The application generates a phone number using the library
+                <a href="https://mimesis.name/" target="_blank">"Mimesis"</a> (fake data generator for Python).
+                Then validates the received number using the library
+                <a href="https://github.com/daviddrysdale/python-phonenumbers" target="_blank">"Phonenumbers"</a>
+                (Python version of Google's common library for parsing, formatting, storing and validating international phone numbers.).
+            </p>
+            <p>
+                If the number is valid, it is shown on the screen. The "Copy" and "QR code" buttons use a phone number without a "+" and a country code.
+            </p>
+            <p>
+                If the 100 generated numbers are not valid from the point of view of the "Phonenumbers" library,
+                the last number will be displayed, but it will not be valid and highlighted in red.
+                As an example, Estonia (ET code).
+            </p>
+            <p>
+                If you have an understanding of how to improve the quality of the generated data, it is better to create a Issue in the
+                <a href="https://github.com/lk-geimfari/mimesis/issues" target="_blank">Mimesis Issue Tracker</a>
+            </p>
+            <p>
+                The user interface is made using the <a href="https://websim.ai/" target="_blank">WebSim AI-powered platform</a>
+            </p>
+            <p>
+                This project is on <a href="https://github.com/ZhiVV/valid-phone-number-generator/issues">github</a>
+            </p>
+        </footer>
+        <script src="{% static 'appfront/js/script.js' %}"></script>
+    </body>
+</html>
