@@ -4,6 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Phone Generator</title>
+        <link rel="icon" href="{% static 'appfront/images/favicon.ico' %}" />
         <link href="{% static 'appfront/css/styles.css' %}" rel="stylesheet">
     </head>
     <body>
@@ -34,18 +35,11 @@
                 </form>
                 <div class="copy-container">
                     {% if phone_number %}
-                    <p>
-                        Phone number:  +{{ phone_number.country_code }}
+                    <p>Phone number:  +{{ phone_number.country_code }}
                         {% if phone_number.extension %}
-                        <span class="copy-text">
-                            <font color="red">
-                                {{ phone_number.national_number }}
-                            </font>
-                        </span>
+                        <span class="copy-text"><font color="red">{{ phone_number.national_number }}</font></span>
                         {% else %}
-                        <span class="copy-text">
-                            {{ phone_number.national_number }}
-                        </span>
+                        <span class="copy-text">{{ phone_number.national_number }}</span>
                         {% endif %}
                         <button class="copy-button">
                             Copy

@@ -1,8 +1,10 @@
 import qrcode
+import mimesis
 from mimesis import Person
 import phonenumbers
 from phonenumbers import PhoneNumber
 from io import BytesIO
+from appfront.config import EXTRA_LOCALE
 
 
 def make_qr_code(text, border=2, box_size=12, error_correction=qrcode.constants.ERROR_CORRECT_M):
@@ -22,7 +24,12 @@ def make_qr_code(text, border=2, box_size=12, error_correction=qrcode.constants.
 
 
 def generate_number(locale: str = 'en') -> PhoneNumber:
-    person = Person(locale)
+    extra_locale = False
+    try:
+        person = Person(locale)
+    except mimesis.exceptions.LocaleError:
+        print('Used not mimesis locale')
+        extra_locale = True
     valid = False
     count = 0
     result = 'empty'
@@ -30,7 +37,11 @@ def generate_number(locale: str = 'en') -> PhoneNumber:
     while not valid:
         count += 1
         print(f'attempt no.{count}')
-        temp_number = person.phone_number()
+        if extra_locale:
+            mask = EXTRA_LOCALE[locale].mask
+            temp_number = Person().phone_number(mask=mask)
+        else:
+            temp_number = person.phone_number()
         print(f' raw generate number: {temp_number}')
         temp_number = temp_number.replace(" ", "")
         temp_number = temp_number.replace("-", "")

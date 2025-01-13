@@ -1,12 +1,12 @@
 // Copy button functionality
 document.querySelector('.copy-button').addEventListener('click', function() {
-    const textToCopy = document.querySelector('.copy-text').textContent;
+    const textToCopy = document.querySelector('.copy-text').textContent.trim();
     navigator.clipboard.writeText(textToCopy).then(() => {
         const originalText = this.textContent;
         this.textContent = 'Wait';
         setTimeout(() => {
             this.textContent = originalText;
-        }, 1500);
+        }, 1000);
     }).catch(err => {
         console.error('Failed to copy text:', err);
         alert('Failed to copy text to clipboard');
